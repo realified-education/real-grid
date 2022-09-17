@@ -1,0 +1,31 @@
+.real-grid {
+  display: flex;
+  flex-direction: column;
+
+  .real-columns {
+    display: flex;
+    flex-direction: row;
+    
+    .real-column {
+      padding: 4px 8px;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 2px;
+    }
+  }
+
+  .real-rows {
+    display: flex;
+    flex-direction: column;
+
+    .real-row {
+      display: flex;
+      flex-direction: row;
+
+      .real-cell {
+        padding: 4px 8px;
+      }
+    }
+  }
+}
