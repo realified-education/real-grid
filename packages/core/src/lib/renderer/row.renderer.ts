@@ -1,14 +1,16 @@
-import { GridConfig, GridRenderConfig } from '../config'
+import { GridConfig, GridRenderConfig } from '../config/config'
 import { GridContext } from '../context'
 import { cellRenderer } from './cell.renderer'
 import { createElement } from './element'
-import { Renderer } from './types'
+import { IncludeData, Renderer } from './types'
+
+export type RowRenderer<T> = Renderer & IncludeData<T>
 
 export function rowRenderer<T>(
   data: T,
   config: GridConfig<T> & GridContext,
   renderConfig: GridRenderConfig
-): Renderer {
+): RowRenderer<T> {
   const rowElement = createElement('div')
   rowElement.addClasses(['row'])
 
@@ -17,7 +19,7 @@ export function rowRenderer<T>(
   const dataMap = data as Record<keyof T, unknown>
 
   columns.forEach((item) => {
-    const cell = cellRenderer(dataMap[item.key as keyof T], item)
+    const cell = cellRenderer(dataMap[item.key], item)
     rowElement.appendChild(cell.element)
   })
 
@@ -26,5 +28,6 @@ export function rowRenderer<T>(
       rowElement.destroy()
     },
     element: rowElement,
+    data,
   }
 }

@@ -1,8 +1,9 @@
-import { Disposable, GridConfig, GridRenderConfig } from '../config'
+import { Disposable, GridConfig, GridRenderConfig } from '../config/config'
 import { GridContext } from '../context'
-import { columnRenderer } from './column.renderer'
+import { ColumnRenderer, columnRenderer } from './column.renderer'
 import { createElement } from './element'
-import { rowRenderer } from './row.renderer'
+import { RowRenderer, rowRenderer } from './row.renderer'
+import { createSort } from './sort.renderer'
 
 export function gridRenderer<T>(
   config: GridConfig<T> & GridContext,
@@ -15,11 +16,16 @@ export function gridRenderer<T>(
   columnsElement.addClasses(['columns'])
   rowsElement.addClasses(['rows'])
 
+  config.rowsElement = rowsElement
+
   const columns = config.columns || []
   const rows = config.data || []
+  const columnRenderers: ColumnRenderer<T, keyof T>[] = []
+  const rowRenderers: RowRenderer<T>[] = []
 
   columns.forEach((item) => {
     const column = columnRenderer(item, config, renderConfig)
+    columnRenderers.push(column)
     columnsElement.appendChild(column.element)
   })
 
@@ -30,8 +36,16 @@ export function gridRenderer<T>(
 
   rows.forEach((item) => {
     const row = rowRenderer(item, config, renderConfig)
+    rowRenderers.push(row)
     rowsElement.appendChild(row.element)
   })
+
+  const sortDisposable = createSort(
+    columnRenderers,
+    rowRenderers,
+    config,
+    renderConfig
+  )
 
   config.logger?.log('Rendered ' + rows.length + ' rows')
 
@@ -41,6 +55,9 @@ export function gridRenderer<T>(
   return {
     destroy: () => {
       gridElement.destroy()
+      columnsElement.destroy()
+      rowsElement.destroy()
+      sortDisposable.destroy()
     },
   }
 }

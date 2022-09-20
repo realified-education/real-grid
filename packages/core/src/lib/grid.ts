@@ -1,4 +1,4 @@
-import { Disposable, GridConfig, GridRenderConfig } from './config'
+import { Disposable, GridConfig, GridRenderConfig } from './config/config'
 import { GridContext } from './context'
 import { createLogger } from './logger'
 import { GridOperator } from './operators'
@@ -7,7 +7,8 @@ import { gridRenderer } from './renderer/grid.renderer'
 export type RealGrid = (renderConfig: GridRenderConfig) => Disposable
 
 export function createGrid<T>(...operators: GridOperator<T>[]): RealGrid {
-  let config: GridConfig<T> & GridContext = {}
+  const start = new Date().getTime()
+  let config: GridConfig<T> & GridContext = { sortContext: {} }
 
   return (renderConfig: GridRenderConfig) => {
     config = operators.reduce((currentConfig, operator) => {
@@ -17,6 +18,10 @@ export function createGrid<T>(...operators: GridOperator<T>[]): RealGrid {
     config.logger = createLogger(config.isDebug)
     config.columnContext = config.columns?.map(() => ({}))
 
-    return gridRenderer(config, renderConfig)
+    const results = gridRenderer(config, renderConfig)
+
+    const stop = new Date().getTime()
+    config.logger?.log('Grid created in ' + (stop - start) + 'ms')
+    return results
   }
 }

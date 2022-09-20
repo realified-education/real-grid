@@ -1,4 +1,4 @@
-import { GridConfig } from '../config'
+import { GridConfig } from '../config/config'
 import { GridContext } from '../context'
 
 export type GridOperator<T> = (
