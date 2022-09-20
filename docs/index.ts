@@ -6,7 +6,6 @@ import {
 } from '../packages/core/src'
 import { SortDirection } from '../packages/core/src/lib/context'
 
-// const dataLength = generateNumberBetween(3, 100)
 const dataLength = 1000
 const data = Array.from({ length: dataLength }, (_, i) => ({
   accountId: generateNumberBetween(100000, 999999),
