@@ -1,7 +1,9 @@
 import { Disposable, GridConfig, GridRenderConfig } from '../config/config'
 import { GridContext, SortDirection } from '../context'
+import { createTimer } from '../utils/timer'
 import { ColumnRenderer } from './column.renderer'
 import { RowRenderer } from './row.renderer'
+import { DataKey } from './types'
 
 export function createSort<T, K extends keyof T>(
   columns: ColumnRenderer<T, K>[],
@@ -11,28 +13,13 @@ export function createSort<T, K extends keyof T>(
 ): Disposable {
   const disposables: Disposable[] = []
 
-  const getSortDirection = (column: ColumnRenderer<T, K>): SortDirection => {
-    const direction = config.sortContext?.[column.config.key as string]
-    if (direction === SortDirection.Ascending) {
-      return SortDirection.Descending
-    }
-
-    return SortDirection.Ascending
-  }
-
   columns.forEach((column) => {
-    // Set to the context
-    if (config.sortContext) {
-      config.sortContext[column.config.key as string] =
-        column.config.sortDirection ?? SortDirection.Default
-    }
+    setSortToContext(column, config)
 
     const disposable = column.on('sort', (event) => {
-      const sortStart = new Date().getTime()
-      const sortDirection = getSortDirection(column)
-
+      const timer = createTimer()
+      const sortDirection = getSortDirection(column, config)
       const type = column.config.type ?? undefined
-
       let sortedRows: RowRenderer<T>[] = []
 
       const sortFunction = column.config.sortFunction
@@ -56,10 +43,8 @@ export function createSort<T, K extends keyof T>(
         })
       } else {
         sortedRows = rows.sort((a, b) => {
-          const aDataMap = a.data as Record<keyof T, unknown>
-          const bDataMap = b.data as Record<keyof T, unknown>
-          const aVal = aDataMap[event.config.key]
-          const bVal = bDataMap[event.config.key]
+          const aVal = a.data[event.config.key]
+          const bVal = b.data[event.config.key]
           const direction = sortDirection === SortDirection.Ascending ? -1 : 1
 
           // Guess type
@@ -95,8 +80,8 @@ export function createSort<T, K extends keyof T>(
         config.sortContext[event.config.key as string] = sortDirection
       }
 
-      const sortEnd = new Date().getTime()
-      config.logger?.log('Sort completed in ' + (sortEnd - sortStart) + 'ms')
+      timer.stop()
+      config.logger?.log('Sort completed in ' + timer.get() + 'ms')
     })
 
     disposables.push(disposable)
@@ -107,4 +92,32 @@ export function createSort<T, K extends keyof T>(
       disposables.forEach((d) => d.destroy())
     },
   }
+}
+
+/**
+ * Set the sort to the context
+ */
+function setSortToContext<T, K extends DataKey<T>>(
+  column: ColumnRenderer<T, K>,
+  config: GridConfig<T> & GridContext
+) {
+  if (config.sortContext) {
+    config.sortContext[column.config.key as string] =
+      column.config.sortDirection ?? SortDirection.Default
+  }
+}
+
+/**
+ * Get the sort direction for the column
+ */
+function getSortDirection<T, K extends DataKey<T>>(
+  column: ColumnRenderer<T, K>,
+  config: GridConfig<T> & GridContext
+): SortDirection {
+  const direction = config.sortContext?.[column.config.key as string]
+  if (direction === SortDirection.Ascending) {
+    return SortDirection.Descending
+  }
+
+  return SortDirection.Ascending
 }

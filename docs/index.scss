@@ -1,39 +1,59 @@
+#grid {
+  margin: 0 auto;
+}
+
 .real-grid {
   display: flex;
   flex-direction: column;
+  height: 500px;
+  overflow: hidden;
+  width: fit-content;
+  box-shadow: inset 0px -7px 10px -7px #0006;
 
   .real-columns {
     display: flex;
     flex-direction: row;
+    box-shadow: 0 0 9px -1px rgb(0 0 0 / 40%);
+    z-index: 2;
     
     .real-column {
-      padding: 4px 8px;
+      padding: 6px 10px;
       background-color: #e0e0e0;
       cursor: pointer;
       font-weight: bold;
       border-radius: 2px;
+      font-size: 0.9rem;
+
+      &:hover {
+        background-color: darken($color: #e0e0e0, $amount: 5%);
+      }
     }
   }
 
   .real-rows {
-    display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 
     .real-row {
       display: flex;
       flex-direction: row;
       width: fit-content;
+      z-index: -1;
+      align-items: center;
 
-      &:nth-child(odd) {
-        background-color: #f0f0f0;
-      }
-
-      &:hover {
-        background-color: #e0e0e0;
+      &.real-striped {
+        &:nth-child(odd) {
+          background-color: #f0f0f0;
+        }
+  
+        &:hover {
+          background-color: #e0e0e0;
+        }
       }
 
       .real-cell {
-        padding: 4px 8px;
+        padding-left: 10px;
+        padding-right: 10px;
       }
     }
   }

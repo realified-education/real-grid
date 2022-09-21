@@ -34,9 +34,10 @@ export function gridRenderer<T>(
     columns.map((x) => x.key)
   )
 
-  rows.forEach((item) => {
+  rows.forEach((item, i) => {
     const row = rowRenderer(item, config, renderConfig)
     rowRenderers.push(row)
+
     rowsElement.appendChild(row.element)
   })
 

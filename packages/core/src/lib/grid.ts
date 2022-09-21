@@ -3,12 +3,17 @@ import { GridContext } from './context'
 import { createLogger } from './logger'
 import { GridOperator } from './operators'
 import { gridRenderer } from './renderer/grid.renderer'
+import { createTimer } from './utils/timer'
 
 export type RealGrid = (renderConfig: GridRenderConfig) => Disposable
 
 export function createGrid<T>(...operators: GridOperator<T>[]): RealGrid {
-  const start = new Date().getTime()
-  let config: GridConfig<T> & GridContext = { sortContext: {} }
+  const timer = createTimer()
+  let config: GridConfig<T> & GridContext = {
+    sortContext: {},
+    renderContext: {},
+    bufferSize: 50,
+  }
 
   return (renderConfig: GridRenderConfig) => {
     config = operators.reduce((currentConfig, operator) => {
@@ -17,11 +22,12 @@ export function createGrid<T>(...operators: GridOperator<T>[]): RealGrid {
 
     config.logger = createLogger(config.isDebug)
     config.columnContext = config.columns?.map(() => ({}))
+    renderConfig.rowHeight = renderConfig.rowHeight || 30
 
     const results = gridRenderer(config, renderConfig)
 
-    const stop = new Date().getTime()
-    config.logger?.log('Grid created in ' + (stop - start) + 'ms')
+    timer.stop()
+    config.logger?.log('Grid created in ' + timer.get() + 'ms')
     return results
   }
 }

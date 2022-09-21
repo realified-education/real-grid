@@ -7,6 +7,7 @@ export interface GridContext {
   columnContext?: ColumnContext[]
   rowsElement?: GridElement
   sortContext?: SortContext
+  renderContext?: RenderContext
 }
 
 export interface ColumnContext {
@@ -22,4 +23,10 @@ export enum SortDirection {
   Default = 0,
   Ascending = 1,
   Descending = 2,
+}
+
+export interface RenderContext {
+  renderedRows?: number
+  topRowInViewport?: number
+  bottomRowInViewport?: number
 }

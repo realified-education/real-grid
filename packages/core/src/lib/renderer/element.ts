@@ -1,9 +1,14 @@
+import { Disposable } from '../config'
+
 export type GridElement = {
   appendChild: (child: GridElement) => void
   removeChild: (child: GridElement) => void
   setAttribute: (name: string, value: string) => void
   removeAttribute: (name: string) => void
-  addEventListener: (name: string, handler: (event: Event) => void) => void
+  addEventListener: (
+    name: string,
+    handler: (event: Event) => void
+  ) => Disposable
   removeEventListener: (name: string, handler: (event: Event) => void) => void
   getElement: () => HTMLElement
   addClasses: (name: string[]) => void
@@ -11,21 +16,23 @@ export type GridElement = {
   destroy: () => void
   setText: (text: string) => void
   setWidth: (width: number) => void
+  setStyle: (name: string, value: string) => void
 }
 
 export function createElement(
-  tag: keyof HTMLElementTagNameMap | HTMLElement | null = 'div'
+  tag: keyof HTMLElementTagNameMap | HTMLElement | null = 'div',
+  classes: string[] = []
 ): GridElement {
   let element: HTMLElement
   if (typeof tag === 'string') {
     element = document.createElement(tag)
   } else if (tag instanceof HTMLElement) {
     element = tag
-  } else if (tag === null) {
+  } else {
     element = document.createElement('div')
   }
 
-  return {
+  const results: GridElement = {
     appendChild(child) {
       element.appendChild(child.getElement())
     },
@@ -40,6 +47,11 @@ export function createElement(
     },
     addEventListener(name, handler) {
       element.addEventListener(name, handler)
+      return {
+        destroy() {
+          element.removeEventListener(name, handler)
+        },
+      }
     },
     removeEventListener(name, handler) {
       element.removeEventListener(name, handler)
@@ -62,5 +74,12 @@ export function createElement(
     setWidth(width) {
       element.style.width = width + 'px'
     },
+    setStyle(name, value) {
+      element.style.setProperty(name, value)
+    },
   }
+
+  results.addClasses(classes)
+
+  return results
 }
