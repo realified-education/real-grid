@@ -20,4 +20,8 @@ export interface IncludeData<T> {
   data: T
 }
 
+export interface IncludeId {
+  id: string
+}
+
 export type DataKey<T> = keyof T

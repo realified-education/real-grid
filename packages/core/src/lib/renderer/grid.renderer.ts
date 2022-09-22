@@ -2,6 +2,7 @@ import { Disposable, GridConfig, GridRenderConfig } from '../config/config'
 import { GridContext } from '../context'
 import { ColumnRenderer, columnRenderer } from './column.renderer'
 import { createElement } from './element'
+import { setupGridRangeSelection } from './row-selection.renderer'
 import { RowRenderer, rowRenderer } from './row.renderer'
 import { createSort } from './sort.renderer'
 
@@ -41,6 +42,11 @@ export function gridRenderer<T>(
     rowsElement.appendChild(row.element)
   })
 
+  const rangeSelectionDisposable = setupGridRangeSelection(
+    config,
+    rowRenderers.map((x) => x.element)
+  )
+
   const sortDisposable = createSort(
     columnRenderers,
     rowRenderers,
@@ -59,6 +65,7 @@ export function gridRenderer<T>(
       columnsElement.destroy()
       rowsElement.destroy()
       sortDisposable.destroy()
+      rangeSelectionDisposable.destroy()
     },
   }
 }

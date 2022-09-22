@@ -1,6 +1,6 @@
 import { Column, Disposable } from '../config'
 import { GridConfig, GridRenderConfig } from '../config/config'
-import { GridContext } from '../context'
+import { GridContext, SortContext, SortDirection } from '../context'
 import { useTitleCase } from '../utils/use-title-case'
 import { createElement, GridElement } from './element'
 import { DataKey, Eventable, RealEventListener, Renderer } from './types'
@@ -30,6 +30,7 @@ export function columnRenderer<T, K extends DataKey<T>>(
 
   setColumnLabel(columnElement, columnConfig)
   setWidth(columnElement, columnConfig.width)
+  setSortIcon(columnElement, columnConfig, config.sortContext ?? {}, listeners)
 
   results = {
     destroy: () => {
@@ -50,6 +51,35 @@ export function columnRenderer<T, K extends DataKey<T>>(
   )
 
   return results
+}
+
+function setSortIcon<T, K extends DataKey<T>>(
+  columnElement: GridElement,
+  columnConfig: Column<T, K>,
+  sortContext: SortContext,
+  listeners: EventListenerMap<T, K>
+): Disposable {
+  const sortDirection =
+    sortContext[columnConfig.key as string] ?? SortDirection.Ascending
+
+  const sortIcon = createElement('span', ['sort-icon', sortDirection])
+  columnElement.appendChild(sortIcon)
+
+  const listener = setOnListener(listeners, 'sort', () => {
+    if (sortIcon.getText() !== '^') {
+      sortIcon.setText('^')
+    }
+
+    sortIcon.removeClasses(['asc', 'desc', 'default'])
+    sortIcon.addClasses([sortContext[columnConfig.key as string]])
+  })
+
+  return {
+    destroy: () => {
+      sortIcon.destroy()
+      listener.destroy()
+    },
+  }
 }
 
 /**

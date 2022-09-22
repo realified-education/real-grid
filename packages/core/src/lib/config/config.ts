@@ -4,6 +4,8 @@ export interface GridConfig<T> {
   data?: T[]
   columns?: Columns<T>
   bufferSize: number
+  rowSelection?: boolean
+  multiRowSelection?: boolean
 }
 
 export interface GridRenderConfig {
@@ -14,4 +16,10 @@ export interface GridRenderConfig {
 
 export interface Disposable {
   destroy: () => void
+}
+
+export const EMPTY_DISPOSABLE: Disposable = {
+  destroy: () => {
+    // do nothing
+  },
 }

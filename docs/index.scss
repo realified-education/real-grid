@@ -1,5 +1,5 @@
 #grid {
-  margin: 0 auto;
+  margin: 40px auto;
 }
 
 .real-grid {
@@ -9,13 +9,22 @@
   overflow: hidden;
   width: fit-content;
   box-shadow: inset 0px -7px 10px -7px #0006;
+  border-radius: 4px;
+
+  // https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 
   .real-columns {
     display: flex;
     flex-direction: row;
     box-shadow: 0 0 9px -1px rgb(0 0 0 / 40%);
     z-index: 2;
-    
+
     .real-column {
       padding: 6px 10px;
       background-color: #e0e0e0;
@@ -23,9 +32,21 @@
       font-weight: bold;
       border-radius: 2px;
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      transform: translateY(2px);
 
       &:hover {
         background-color: darken($color: #e0e0e0, $amount: 5%);
+      }
+
+      .real-sort-icon {
+        margin-left: 5px;
+        font-size: 0.8rem;
+
+        &.real-desc {
+          transform: rotate(180deg);
+        }
       }
     }
   }
@@ -41,11 +62,17 @@
       z-index: -1;
       align-items: center;
 
+      transition: ease-in-out 130ms background-color;
+
+      &.real-selected {
+        background-color: #bcddf2 !important;
+      }
+
       &.real-striped {
         &:nth-child(odd) {
           background-color: #f0f0f0;
         }
-  
+
         &:hover {
           background-color: #e0e0e0;
         }

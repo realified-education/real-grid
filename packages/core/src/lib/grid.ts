@@ -1,5 +1,6 @@
 import { Disposable, GridConfig, GridRenderConfig } from './config/config'
 import { GridContext } from './context'
+import { createEventHub } from './events/events-hub'
 import { createLogger } from './logger'
 import { GridOperator } from './operators'
 import { gridRenderer } from './renderer/grid.renderer'
@@ -13,6 +14,9 @@ export function createGrid<T>(...operators: GridOperator<T>[]): RealGrid {
     sortContext: {},
     renderContext: {},
     bufferSize: 50,
+    selectedRows: new Set(),
+    rangeSelection: {},
+    eventHub: createEventHub(),
   }
 
   return (renderConfig: GridRenderConfig) => {

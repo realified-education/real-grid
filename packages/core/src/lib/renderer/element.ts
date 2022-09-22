@@ -12,9 +12,11 @@ export type GridElement = {
   removeEventListener: (name: string, handler: (event: Event) => void) => void
   getElement: () => HTMLElement
   addClasses: (name: string[]) => void
+  toggleClasses: (names: string[]) => void
   removeClasses: (name: string[]) => void
   destroy: () => void
   setText: (text: string) => void
+  getText: () => string
   setWidth: (width: number) => void
   setStyle: (name: string, value: string) => void
 }
@@ -62,6 +64,9 @@ export function createElement(
     addClasses(names) {
       names.forEach((name) => element.classList.add('real-' + name))
     },
+    toggleClasses(names) {
+      names.forEach((name) => element.classList.toggle('real-' + name))
+    },
     removeClasses(names) {
       names.forEach((name) => element.classList.remove('real-' + name))
     },
@@ -70,6 +75,9 @@ export function createElement(
     },
     setText(text) {
       element.innerText = text
+    },
+    getText() {
+      return element.innerText
     },
     setWidth(width) {
       element.style.width = width + 'px'
