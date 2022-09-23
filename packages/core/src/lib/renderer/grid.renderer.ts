@@ -4,6 +4,7 @@ import { ColumnRenderer, columnRenderer } from './column.renderer'
 import { createElement } from './element'
 import { setupGridRangeSelection } from './row-selection.renderer'
 import { RowRenderer, rowRenderer } from './row.renderer'
+import { setScrollBuffer } from './scroll-buffer.renderer'
 import { createSort } from './sort.renderer'
 
 export function gridRenderer<T>(
@@ -38,9 +39,9 @@ export function gridRenderer<T>(
   rows.forEach((item, i) => {
     const row = rowRenderer(item, config, renderConfig)
     rowRenderers.push(row)
-
-    rowsElement.appendChild(row.element)
   })
+
+  const scrollDisposable = setScrollBuffer(rowsElement, renderConfig.rowHeight, rowRenderers, config.bufferSize)
 
   const rangeSelectionDisposable = setupGridRangeSelection(
     config,
@@ -65,6 +66,7 @@ export function gridRenderer<T>(
       columnsElement.destroy()
       rowsElement.destroy()
       sortDisposable.destroy()
+      scrollDisposable.destroy()
       rangeSelectionDisposable.destroy()
     },
   }

@@ -3,6 +3,7 @@ import { Disposable } from '../config'
 export type GridElement = {
   appendChild: (child: GridElement) => void
   removeChild: (child: GridElement) => void
+  detach: () => void
   setAttribute: (name: string, value: string) => void
   removeAttribute: (name: string) => void
   addEventListener: (
@@ -18,6 +19,7 @@ export type GridElement = {
   setText: (text: string) => void
   getText: () => string
   setWidth: (width: number) => void
+  setHeight: (width: number) => void
   setStyle: (name: string, value: string) => void
 }
 
@@ -40,6 +42,9 @@ export function createElement(
     },
     removeChild(child) {
       element.removeChild(child.getElement())
+    },
+    detach() {
+      element.remove()
     },
     setAttribute(name, value) {
       element.setAttribute(name, value)
@@ -81,6 +86,9 @@ export function createElement(
     },
     setWidth(width) {
       element.style.width = width + 'px'
+    },
+    setHeight(height) {
+      element.style.height = height + 'px'
     },
     setStyle(name, value) {
       element.style.setProperty(name, value)
