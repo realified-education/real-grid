@@ -5,7 +5,6 @@ import {
   useLogger,
   useRowSelection,
 } from '../packages/core/src'
-import { SortDirection } from '../packages/core/src/lib/context'
 
 const dataLength = 1000
 const data = Array.from({ length: dataLength }, (_, i) => ({

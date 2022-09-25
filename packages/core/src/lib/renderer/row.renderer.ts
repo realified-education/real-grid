@@ -1,6 +1,6 @@
 import { Column } from '../config/column.config'
 import { GridConfig, GridRenderConfig } from '../config/config'
-import { GridContext } from '../context'
+import { GridContext } from '../config/context'
 import { generateId } from '../utils/id'
 import { cellRenderer } from './cell.renderer'
 import { createElement, GridElement } from './element'

@@ -1,6 +1,6 @@
-import { EventHub } from './events/events-hub'
-import { Logger } from './logger'
-import { GridElement } from './renderer/element'
+import { EventHub } from '../events/events-hub'
+import { Logger } from '../logger'
+import { GridElement } from '../renderer/element'
 
 export interface GridContext {
   isDebug?: boolean
@@ -12,7 +12,7 @@ export interface GridContext {
   selectedRows?: Set<GridElement>
   rangeSelection?: RangeSelection
 
-  eventHub: EventHub
+  eventHub?: EventHub
 }
 
 export interface ColumnContext {

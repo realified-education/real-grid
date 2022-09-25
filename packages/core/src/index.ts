@@ -1,2 +1,2 @@
-export * from './lib/grid'
+export * from './lib/main'
 export * from './lib/operators'

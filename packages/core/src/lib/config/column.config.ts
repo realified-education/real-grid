@@ -1,5 +1,5 @@
-import { SortDirection } from '../context'
 import { DataKey } from '../renderer/types'
+import { SortDirection } from './context'
 
 export type ColumnSortParams<T, K extends DataKey<T>> = {
   config: Column<T, K>

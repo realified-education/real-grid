@@ -1,5 +1,5 @@
 import { Disposable, GridConfig, GridRenderConfig } from './config/config'
-import { GridContext } from './context'
+import { GridContext } from './config/context'
 import { createEventHub } from './events/events-hub'
 import { createLogger } from './logger'
 import { GridOperator } from './operators'

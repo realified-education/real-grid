@@ -1,5 +1,5 @@
 import { Disposable, EMPTY_DISPOSABLE, GridConfig } from '../config'
-import { GridContext } from '../context'
+import { GridContext } from '../config/context'
 import { EventType, RangeSelectionEvent } from '../events/event-types'
 import { GridElement } from './element'
 

@@ -1,6 +1,6 @@
 import { Column, Disposable } from '../config'
 import { GridConfig, GridRenderConfig } from '../config/config'
-import { GridContext, SortContext, SortDirection } from '../context'
+import { GridContext, SortContext, SortDirection } from '../config/context'
 import { useTitleCase } from '../utils/use-title-case'
 import { createElement, GridElement } from './element'
 import { DataKey, Eventable, RealEventListener, Renderer } from './types'

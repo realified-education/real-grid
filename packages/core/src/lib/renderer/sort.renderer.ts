@@ -1,5 +1,5 @@
 import { Disposable, GridConfig, GridRenderConfig } from '../config/config'
-import { GridContext, SortDirection } from '../context'
+import { GridContext, SortDirection } from '../config/context'
 import { createTimer } from '../utils/timer'
 import { ColumnRenderer } from './column.renderer'
 import { RowRenderer } from './row.renderer'

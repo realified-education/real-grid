@@ -1,5 +1,5 @@
 import { Disposable, GridConfig, GridRenderConfig } from '../config/config'
-import { GridContext } from '../context'
+import { GridContext } from '../config/context'
 import { ColumnRenderer, columnRenderer } from './column.renderer'
 import { createElement } from './element'
 import { setupGridRangeSelection } from './row-selection.renderer'
