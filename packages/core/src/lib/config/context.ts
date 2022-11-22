@@ -42,6 +42,7 @@ export interface RenderContext {
 export interface RangeSelection {
   start?: GridElement
   end?: GridElement
+  selectedCells?: GridElement[]
 }
 
 export interface CellRangeSelection extends RangeSelection {

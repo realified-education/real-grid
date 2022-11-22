@@ -62,6 +62,7 @@ function applyClassesToRange<T>(config: GridConfig<T> & GridContext) {
 
   if (start === end) {
     start.addClasses(['selected-top', 'selected-bottom', 'selected-left', 'selected-right'])
+    config.cellSelection.selectedCells = [start]
   }
 
   const startRow = start.getData<GridElement>('row')
@@ -87,6 +88,7 @@ function applyClassesToRange<T>(config: GridConfig<T> & GridContext) {
   ) ?? []
 
   // add selected class to all cells between startCellIndex and endCellIndex for each of the rows
+  config.cellSelection.selectedCells = []
   rows.forEach((row, rowIdx) => {
     const cells = row.element.getData<Renderer[]>('cells')
     const min = Math.min(startCellIndex, endCellIndex)
@@ -106,6 +108,7 @@ function applyClassesToRange<T>(config: GridConfig<T> & GridContext) {
         classes.push('selected-right')
       }
       cell.element.addClasses(classes)
+      config.cellSelection?.selectedCells?.push(cell.element)
     })
   })
 }

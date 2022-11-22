@@ -3,6 +3,7 @@ import { GridContext } from '../config/context'
 import { EventType } from '../events/event-types'
 import { ColumnRenderer, columnRenderer } from './column.renderer'
 import { createElement } from './element'
+import { renderKeybindings } from './keybindings.renderer'
 import { setupGridRangeSelection } from './row-selection.renderer'
 import { RowRenderer, rowRenderer } from './row.renderer'
 import { setScrollBuffer } from './scroll-buffer.renderer'
@@ -71,6 +72,8 @@ export function gridRenderer<T>(
     clearCellClass(rowRenderers, classes)
   })
 
+  const keyBindings = renderKeybindings(gridElement, config)
+
   return {
     destroy: () => {
       columnsElement.destroy()
@@ -79,6 +82,7 @@ export function gridRenderer<T>(
       scrollDisposable.destroy()
       rangeSelectionDisposable.destroy()
       clearClassListener?.destroy()
+      keyBindings.destroy()
     },
   }
 }

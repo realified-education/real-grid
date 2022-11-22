@@ -16,8 +16,9 @@ export function cellRenderer<T, K extends DataKey<T>>(
 ): Renderer {
   const cellElement = createElement('div', ['cell'])
 
-  renderCellContents(data, cellElement, columnConfig.valueGetter)
+  const contents = renderCellContents(data, cellElement, columnConfig.valueGetter)
   setWidth(cellElement, columnConfig.width)
+  cellElement.setData('data', contents)
 
   const cellSelectionListener = renderCellSelection(cellElement, config)
 
@@ -42,6 +43,7 @@ function renderCellContents<T, K extends DataKey<T>>(
 ) {
   const cellData = valueGetter?.(data) ?? data + ''
   cellElement.setText(cellData)
+  return cellData
 }
 
 /**
