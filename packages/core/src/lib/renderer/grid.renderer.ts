@@ -1,11 +1,13 @@
 import { Disposable, GridConfig, GridRenderConfig } from '../config/config'
 import { GridContext } from '../config/context'
+import { EventType } from '../events/event-types'
 import { ColumnRenderer, columnRenderer } from './column.renderer'
 import { createElement } from './element'
 import { setupGridRangeSelection } from './row-selection.renderer'
 import { RowRenderer, rowRenderer } from './row.renderer'
 import { setScrollBuffer } from './scroll-buffer.renderer'
 import { createSort } from './sort.renderer'
+import { Renderer } from './types'
 
 export function gridRenderer<T>(
   config: GridConfig<T> & GridContext,
@@ -40,6 +42,7 @@ export function gridRenderer<T>(
     const row = rowRenderer(item, config, renderConfig)
     rowRenderers.push(row)
   })
+  config.allRowRenders = rowRenderers
 
   const scrollDisposable = setScrollBuffer(
     rowsElement,
@@ -64,14 +67,29 @@ export function gridRenderer<T>(
   gridElement.appendChild(columnsElement)
   gridElement.appendChild(rowsElement)
 
+  const clearClassListener = config.eventHub?.on(EventType.CLEAR_CELL_CLASS, (classes: string[]) => {
+    clearCellClass(rowRenderers, classes)
+  })
+
   return {
     destroy: () => {
-      gridElement.destroy()
       columnsElement.destroy()
       rowsElement.destroy()
       sortDisposable.destroy()
       scrollDisposable.destroy()
       rangeSelectionDisposable.destroy()
+      clearClassListener?.destroy()
     },
   }
+}
+
+function clearCellClass<T>(rowRenderers: RowRenderer<T>[], classes: string[]) {
+  let cells: Renderer[] = []
+  rowRenderers.forEach(row =>{
+    cells = cells.concat(row.cells)
+  })
+  
+  cells.forEach(cell => {
+    cell.element.removeClasses(classes)
+  })
 }

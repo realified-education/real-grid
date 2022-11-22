@@ -7,7 +7,9 @@ import { createElement, GridElement } from './element'
 import { renderRowSelection } from './row-selection.renderer'
 import { DataKey, IncludeData, IncludeId, Renderer } from './types'
 
-export type RowRenderer<T> = Renderer & IncludeData<T> & IncludeId
+export type RowRenderer<T> = Renderer & IncludeData<T> & IncludeId & {
+  cells: Renderer[]
+}
 
 export function rowRenderer<T>(
   data: T,
@@ -18,7 +20,11 @@ export function rowRenderer<T>(
   const columns = config.columns || []
 
   setupStripedRows(rowElement, renderConfig.disableStriped)
-  renderCells(columns, data, rowElement)
+  const cells = renderCells(columns, data, rowElement, config)
+
+  rowElement.setData('cells', cells)
+  cells.map(x => x.element.setData('row', rowElement))
+
   renderRowHeight(rowElement, renderConfig.rowHeight)
   const rowId = generateId()
 
@@ -32,6 +38,7 @@ export function rowRenderer<T>(
     element: rowElement,
     data,
     id: rowId,
+    cells,
   }
 }
 
@@ -59,10 +66,15 @@ function setupStripedRows(rowElement: GridElement, disableStriped?: boolean) {
 function renderCells<T, K extends DataKey<T>>(
   columns: Column<T, K>[],
   data: T,
-  rowElement: GridElement
+  rowElement: GridElement,
+  config:  GridConfig<T> & GridContext
 ) {
+  const cellRenderers: Renderer[] = []
   columns.forEach((item) => {
-    const cell = cellRenderer(data[item.key], item)
+    const cell = cellRenderer(data[item.key], item, config)
     rowElement.appendChild(cell.element)
+    cellRenderers.push(cell)
   })
+
+  return cellRenderers
 }

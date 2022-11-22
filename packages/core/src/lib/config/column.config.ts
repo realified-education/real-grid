@@ -34,6 +34,12 @@ export type Column<T, K extends DataKey<T>> = {
   type?: ColumnType
 }
 
+/**
+ * Used to format the value of a column
+ * 
+ * Usage:
+ *  { key: 'revenue', label: 'Revenue', width: 100, valueGetter: (row) => `$${row.toFixed(2)}` }
+ */
 export type ValueGetterFunction<T, K extends DataKey<T>> = (
   data: T[K]
 ) => string

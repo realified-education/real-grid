@@ -6,6 +6,7 @@ export interface GridConfig<T> {
   bufferSize: number
   rowSelection?: boolean
   multiRowSelection?: boolean
+  enableCellSelection?: boolean
 }
 
 export interface GridRenderConfig {

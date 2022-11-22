@@ -16,6 +16,8 @@ export function createGrid<T>(...operators: GridOperator<T>[]): RealGrid {
     bufferSize: 50,
     selectedRows: new Set(),
     rangeSelection: {},
+    cellSelection: {},
+    allRowRenders: [],
     eventHub: createEventHub(),
   }
 

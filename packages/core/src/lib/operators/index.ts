@@ -1,5 +1,6 @@
 export * from './types'
 export * from './use-buffer'
+export * from './use-cell-selection'
 export * from './use-columns'
 export * from './use-data'
 export * from './use-logger'

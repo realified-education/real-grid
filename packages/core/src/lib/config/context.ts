@@ -1,6 +1,7 @@
 import { EventHub } from '../events/events-hub'
 import { Logger } from '../logger'
 import { GridElement } from '../renderer/element'
+import { RowRenderer } from '../renderer/row.renderer'
 
 export interface GridContext {
   isDebug?: boolean
@@ -11,6 +12,8 @@ export interface GridContext {
   renderContext?: RenderContext
   selectedRows?: Set<GridElement>
   rangeSelection?: RangeSelection
+  cellSelection?: CellRangeSelection
+  allRowRenders?: RowRenderer<unknown>[]
 
   eventHub?: EventHub
 }
@@ -40,3 +43,8 @@ export interface RangeSelection {
   start?: GridElement
   end?: GridElement
 }
+
+export interface CellRangeSelection extends RangeSelection {
+  mouseDown?: boolean
+}
+

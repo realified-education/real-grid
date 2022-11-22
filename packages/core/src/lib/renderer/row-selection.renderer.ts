@@ -42,7 +42,7 @@ function setRangeSelection(
     config.rangeSelection.start = rowElement
   } else {
     config.rangeSelection.end = rowElement
-    config.eventHub.emit(EventType.ON_RANGE_SELECTION_CHANGE, {
+    config.eventHub?.emit(EventType.ON_RANGE_SELECTION_CHANGE, {
       start: config.rangeSelection.start,
       end: config.rangeSelection.end,
     })
@@ -88,7 +88,7 @@ export function setupGridRangeSelection<T>(
   config: GridConfig<T> & GridContext,
   rowGridElements: GridElement[]
 ): Disposable {
-  const listener = config.eventHub.on<RangeSelectionEvent>(
+  const listener = config.eventHub?.on<RangeSelectionEvent>(
     EventType.ON_RANGE_SELECTION_CHANGE,
     (e) => {
       const { start, end } = e
@@ -116,7 +116,7 @@ export function setupGridRangeSelection<T>(
 
   return {
     destroy() {
-      listener.destroy()
+      listener?.destroy()
       document.removeEventListener('keydown', clearAll)
     },
   }
