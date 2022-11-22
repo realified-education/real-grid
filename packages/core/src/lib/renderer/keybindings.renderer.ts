@@ -9,6 +9,10 @@ export function renderKeybindings<T>(
   const callback = (e: Event) => {
     const event = e as KeyboardEvent
     const cmdOrCtrl = event.metaKey || event.ctrlKey
+    if (event.key === 'Escape') {
+      clearSelection(config)
+    }
+
     if (!cmdOrCtrl) {
       return
     }
@@ -55,4 +59,12 @@ function copyCellValuesToClipboard<T>(
   setTimeout(() => {
     selectedCells.map(x => x.removeClasses(['copied']))
   }, 300)
+}
+
+function clearSelection<T>(config: GridConfig<T> & GridContext) {
+  if (config.cellSelection) {
+    const cells = config.cellSelection.selectedCells ?? []
+    cells.map(x => x.removeClasses(['selected-top', 'selected-bottom', 'selected-left', 'selected-right', 'selected']))
+    config.cellSelection.selectedCells = []
+  }
 }
