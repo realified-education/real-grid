@@ -40,11 +40,20 @@
       background-color: #e0e0e0;
       cursor: pointer;
       font-weight: bold;
-      border-radius: 2px;
       font-size: 0.9rem;
       display: flex;
       align-items: center;
       transform: translateY(2px);
+
+      &:first-child {
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+      }
+
+      &:last-child {
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
+      }
 
       // Ellipses
       text-overflow: ellipsis;

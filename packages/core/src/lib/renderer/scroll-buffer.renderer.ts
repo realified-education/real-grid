@@ -46,7 +46,11 @@ export function setScrollBuffer<T>(
     }
 
     rowsToRender = rows.slice(firstVisibleRowCache, lastVisibleRowCache)
-    rowsToRender.forEach((row) => rowsElement.appendChild(row.element))
+    rowsToRender.forEach((row) => {
+      if (row.element.getIndex() === -1) {
+        rowsElement.appendChild(row.element)
+      }
+    })
 
     rowsElement.appendChild(postRowPadding)
 
