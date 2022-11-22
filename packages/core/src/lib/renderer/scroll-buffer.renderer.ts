@@ -54,7 +54,7 @@ export function setScrollBuffer<T>(
 
     rowsElement.appendChild(postRowPadding)
 
-    postRowPadding.setHeight((rows.length - lastVisibleRow) * (rowHeight ?? 30))
+    postRowPadding.setHeight((rows.length - lastVisibleRow < 0 ? 0 : rows.length - lastVisibleRow) * (rowHeight ?? 30))
 
     firstVisibleRowCache = firstVisibleRow
     lastVisibleRowCache = lastVisibleRow
