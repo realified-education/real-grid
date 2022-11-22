@@ -28,6 +28,7 @@ export type GridElement = {
   setHeight: (width: number) => void
   setStyle: (name: string, value: string) => void
   getIndex: () => number
+  clearChildren: () => void
 }
 
 export function createElement(
@@ -119,6 +120,9 @@ export function createElement(
       if (!parent) return -1
       // The equivalent of parent.children.indexOf(child)
       return Array.prototype.indexOf.call(parent.children, element);
+    },
+    clearChildren() {
+      element.innerHTML = ''
     }
   }
 

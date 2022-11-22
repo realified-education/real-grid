@@ -72,6 +72,8 @@ export function createSort<T, K extends keyof T>(
         })
       }
 
+      config.rowsElement?.clearChildren()
+
       sortedRows.forEach((row) => {
         config.rowsElement?.appendChild(row.element)
       })
