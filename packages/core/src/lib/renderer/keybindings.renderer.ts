@@ -1,6 +1,7 @@
 import { Disposable, GridConfig } from "../config";
 import { GridContext } from "../config/context";
 import { GridElement } from "./element";
+import { Renderer } from "./types";
 
 export function renderKeybindings<T>(
   gridElement: GridElement,
@@ -19,6 +20,10 @@ export function renderKeybindings<T>(
     if (event.key === 'c') {
       copyCellValuesToClipboard(config)
     }
+
+    if (event.key === 'a') {
+      selectAllCells(config)
+    }
   }
   document.addEventListener('keydown', callback)
 
@@ -30,7 +35,7 @@ export function renderKeybindings<T>(
 }
 
 function copyCellValuesToClipboard<T>(
-  config: GridConfig<T> & GridContext
+  config: GridConfig<T> & GridContext,
 ) {
   if ((config.cellSelection?.selectedCells?.length ?? 0) === 0) {
     return
@@ -64,7 +69,18 @@ function copyCellValuesToClipboard<T>(
 function clearSelection<T>(config: GridConfig<T> & GridContext) {
   if (config.cellSelection) {
     const cells = config.cellSelection.selectedCells ?? []
-    cells.map(x => x.removeClasses(['selected-top', 'selected-bottom', 'selected-left', 'selected-right', 'selected']))
+    cells.map(x => x.removeClasses(['selected']))
     config.cellSelection.selectedCells = []
   }
+}
+
+function selectAllCells<T>(config: GridConfig<T> & GridContext) {
+  if (!config.cellSelection) {
+    return
+  }
+  clearSelection(config)
+  const cells = config.allRowRenders?.map(x => x.element.getData<Renderer[]>('cells') ?? []) ?? []
+  const allCells = cells?.reduce((a, b) => a.concat(b), [] as Renderer[]) ?? []
+  allCells.map(x => x.element.addClasses(['selected']))
+  config.cellSelection.selectedCells = allCells.map(x => x.element)
 }

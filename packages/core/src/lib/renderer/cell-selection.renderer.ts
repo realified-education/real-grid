@@ -95,18 +95,6 @@ function applyClassesToRange<T>(config: GridConfig<T> & GridContext) {
     const max = Math.max(startCellIndex, endCellIndex)
     cells?.slice(min, max + 1).forEach((cell, cellIdx) => {
       const classes = ['selected']
-      if (rowIdx === 0) {
-        classes.push('selected-top')
-      }
-      if (rowIdx === rows.length - 1) {
-        classes.push('selected-bottom')
-      }
-      if (cellIdx === 0) {
-        classes.push('selected-left')
-      }
-      if (cellIdx === max - min) {
-        classes.push('selected-right')
-      }
       cell.element.addClasses(classes)
       config.cellSelection?.selectedCells?.push(cell.element)
     })
